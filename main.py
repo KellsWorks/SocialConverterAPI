@@ -1,16 +1,24 @@
-# This is a sample Python script.
+from typing import Union
+from fastapi import FastAPI
+from app.facebook.main import Facebook
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+from app.youtube.main import Youtube
 
+app = FastAPI()
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+youtube = Youtube()
+facebook  = Facebook()
 
+@app.get("/")
+def read_root():
+    return {"Server": "Running..."}
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
+@app.get("/convert/youtube/video")
+def get_response(url: Union[str, None] = None):
+    
+    return youtube.convert(url)
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+@app.get("/convert/facebook/video")
+def get_response(url: Union[str, None] = None):
+
+    return facebook.convert(url=url)
